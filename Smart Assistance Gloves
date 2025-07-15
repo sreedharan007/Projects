@@ -1,0 +1,82 @@
+#include <LiquidCrystal.h>// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(2, 3, 11, 10, 9, 8);
+
+#define v1 4
+#define v2 5
+#define v3 6
+#define v4 7
+
+void setup()
+{
+Serial.begin(9600); 
+pinMode(13,OUTPUT);
+pinMode(v1,OUTPUT);
+pinMode(v2,OUTPUT);
+pinMode(v3,OUTPUT);
+pinMode(v4,OUTPUT);
+lcd.begin(16, 2);
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print(" Smart Gloves ");//change the words if required
+lcd.setCursor(0,1);
+lcd.print("ECE Dept, RYMEC");//change the words if required
+}
+
+void loop()
+{
+int s1=analogRead(A0); 
+int s2=analogRead(A1); 
+int s3=analogRead(A2);
+int s4=analogRead(A3); 
+Serial.print("S1=");
+Serial.print(s1); 
+delay(500);
+Serial.print(" S2=");
+Serial.print(s2); 
+delay(500); 
+Serial.print(" S3=");
+Serial.print(s3); 
+delay(500); 
+Serial.print(" S4=");
+Serial.println(s4); 
+delay(500); //964,985,974,943
+if(s1<900 && s2>1000 && s3>900 && s4>880)
+{
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print(" NEED FOOD ");
+digitalWrite(v1,HIGH); // Green Led on 
+}
+else if(s1>900 && s2<1000 && s3>900 && s4>900)
+{
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print(" NEED WATER ");
+digitalWrite(v2,HIGH); // Green Led off 
+}
+else if(s1>900 && s2>1000 && s3<900 && s4>900)
+{
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print(" REST ROOM ");
+digitalWrite(v3,HIGH); // Green Led off
+}
+else if(s1>900 && s2>1000 && s3>900 && s4<900)
+{
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print(" NEED HELP ");
+digitalWrite(v4,HIGH); // Green Led off 
+}
+else
+{
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print(" waiting.... ");
+digitalWrite(v1,LOW);
+digitalWrite(v2,LOW);
+digitalWrite(v3,LOW);
+digitalWrite(v4,LOW);
+}
+delay(3000);
+}
