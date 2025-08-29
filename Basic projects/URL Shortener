@@ -1,0 +1,36 @@
+pip install pyshorteners
+
+import tkinter as tk
+from tkinter import messagebox
+import pyshorteners
+
+def shorten_url():
+    long_url = url_entry.get()
+    if not long_url:
+        messagebox.showwarning("Input Error", "Please enter a URL")
+        return
+    try:
+        shortener = pyshorteners.Shortener()
+        short_url = shortener.tinyurl.short(long_url)
+        result_entry.delete(0, tk.END)
+        result_entry.insert(0, short_url)
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to shorten URL:\n{e}")
+
+# GUI setup
+root = tk.Tk()
+root.title("URL Shortener")
+root.geometry("400x200")
+root.resizable(False, False)
+
+tk.Label(root, text="Enter Long URL:", font=('Arial', 12)).pack(pady=5)
+url_entry = tk.Entry(root, font=('Arial', 12), width=40)
+url_entry.pack(pady=5)
+
+tk.Button(root, text="Shorten", font=('Arial', 12), command=shorten_url).pack(pady=10)
+
+tk.Label(root, text="Short URL:", font=('Arial', 12)).pack(pady=5)
+result_entry = tk.Entry(root, font=('Arial', 12), width=40)
+result_entry.pack(pady=5)
+
+root.mainloop()
